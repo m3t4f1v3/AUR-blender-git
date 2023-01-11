@@ -106,10 +106,23 @@ build() {
                     -DUSD_ROOT=/usr )
   fi
 
+  # check for clang
+  _CLANG_PKG=$(pacman -Qq clang 2>/dev/null) || true
+  if [ "$_CLANG_PKG" != "" ]; then
+    _CMAKE_FLAGS+=( -DWITH_CLANG=ON
+                    -DCLANG_ROOT_DIR=/usr
+                    -DLLVM_ROOT_DIR=/usr )
+  fi
+
+  # check for HIP
+  _HIP_PKG=$(pacman -Qq hip-runtime-amd 2>/dev/null) || true
+  if [ "$_HIP_PKG" != "" ]; then
+    _CMAKE_FLAGS+=( -DWITH_CYCLES_HIP_BINARIES=ON
+                    -DHIP_ROOT_DIR=/opt/rocm/hip )
+  fi
+
   cmake -G Ninja -S "$srcdir/blender" -B build \
         -C "${srcdir}/blender/build_files/cmake/config/blender_release.cmake" \
-        -DWITH_CYCLES_HIP_BINARIES=ON \
-        -DHIP_ROOT_DIR=/opt/rocm/hip \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_BUILD_TYPE=Release \
         -DWITH_INSTALL_PORTABLE=OFF \
