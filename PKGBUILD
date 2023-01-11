@@ -20,7 +20,7 @@ _fragment="${FRAGMENT:-#branch=master}"
 _CMAKE_FLAGS+=( -DWITH_CYCLES_NETWORK=OFF )
 
 pkgname=blender-git
-pkgver=3.5.r119175.g129197f20d3
+pkgver=3.5.r120797.g88e9826529d
 pkgrel=1
 pkgdesc="A fully integrated 3D graphics creation suite (development)"
 arch=('i686' 'x86_64')
@@ -109,6 +109,7 @@ build() {
   cmake -G Ninja -S "$srcdir/blender" -B build \
         -C "${srcdir}/blender/build_files/cmake/config/blender_release.cmake" \
         -DWITH_CYCLES_HIP_BINARIES=ON \
+        -DHIP_ROOT_DIR=/opt/rocm/hip \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_BUILD_TYPE=Release \
         -DWITH_INSTALL_PORTABLE=OFF \
